@@ -1,23 +1,20 @@
 import datetime
 
 
-class Filetime():
+class Filetime(datetime):
 
-    __init__(self, filetime):
-        # verify is int
-        self._filetime = filetime
-
-    __str__(self):
-        pass
-
-    to_datetime(self):
-        """
-        convert FILETIME (64 bits int) to Python datetime.datetime
-        """
+    @classmethod
+    from_msfiletime(cls, filetime: int):
         _FILETIME_null_date = datetime.datetime(1601, 1, 1, 0, 0, 0)
-        return _FILETIME_null_date + datetime.timedelta(microseconds=self._filetime//10)
+        date_time = _FILETIME_null_date + datetime.timedelta(microseconds=self._filetime//10)
+        timestamp = date_time.timestamp()
+        return Filetime.fromtimestamp(timestamp)
 
-    to_bytes():
-        pass
+    to_msfiletime(self) -> int:
+        """
+        Convert to MS Filetime
+        """
+        return (self - datetime.datetime(1601, 1, 1, 0, 0, 0)) * 10
+
 
     
